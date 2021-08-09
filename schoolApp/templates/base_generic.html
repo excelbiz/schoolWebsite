@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Admin | Home</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static "assets1/vendors/ti-icons/css/themify-icons.css" %}">
+  <link rel="stylesheet" href="{% static "assets1/vendors/base/vendor.bundle.base.css" %}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static "assets1/css/style.css" %}">
+  <link rel="stylesheet" href="{% static "assets1/css/mystyle.css" %}">
+
+  <link href="{% static "assets2/plugins/datatable/css/dataTables.bootstrap4.min.css" %}" rel="stylesheet" />
+  <link href="{% static "assets2/plugins/datatable/css/buttons.bootstrap4.min.css" %}" rel="stylesheet">
+  <link href="{% static "assets2/plugins/datatable/css/responsive.bootstrap4.min.css" %}" rel="stylesheet" />
+  <link href="{% static "assets2/plugins/datatable/css/jquery.dataTables.min.css" %}" rel="stylesheet">
+  <link href="{% static "assets2/plugins/datatable/css/responsive.dataTables.min.css" %}" rel="stylesheet">
+  <link href="{% static "assets2/plugins/select2/css/select2.min.css" %}" rel="stylesheet">
+  <!-- endinject -->
+  {% comment %} <link rel="shortcut icon" href="{% static "assets1/images/favicon.png" %}"> {% endcomment %}
+</head>
+
+
+<body>
+
+    {% block navbar %}
+    
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style ='text-transform:uppercase;'>
+      Noun&nbsp;&nbsp;<img src="{% static "images/IMG-20210805-WA0039.jpg" %}" class="mr-2" alt="logo" width = '65px'/>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="ti-view-list"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="ti-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+        
+          <li class="nav-item nav-profile dropdown">
+          {% if request.user.is_authenticated %}
+           Logged in as {{request.user}}
+          {% endif %}
+           &nbsp; &nbsp;
+           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src=" {% static "images/download.png" %}" alt=""/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a  href= "{% url 'logout' %}" class="dropdown-item">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="ti-view-list"></span>
+        </button>
+      </div>
+    </nav>
+
+    {% endblock navbar %}
+
+    <!-- partial -->
+    {% block sidebar %}
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">
+              <i class="ti-dashboard menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="ti-comments-smiley menu-icon"></i>
+              <span class="menu-title">Manage Blog</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_post' %}">Add Post</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'post' %}">View Post</a></li>
+              </ul>
+            </div>
+          </li>
+           <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Manage Courses</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic1">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="#">Add Courses</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">View Courses</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic">
+              <i class="ti-user menu-icon"></i>
+              <span class="menu-title">Manage Users</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic2">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="#">Add User</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">View User</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic3" aria-expanded="false" aria-controls="ui-basic">
+              <i class="ti-settings menu-icon"></i>
+              <span class="menu-title">Manage Categories</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic3">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_category' %}">Add Categories</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'category' %}">View Categories</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+       </nav>
+       {% endblock sidebar %}
+
+      <!-- partial -->
+
+      {% block content %}
+
+
+      {% endblock content %}
+
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Noun School Website {%now "Y"%}</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Designed By &copy; Dhamilare</span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+     
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{% static  "assets1/vendors/base/vendor.bundle.base.js" %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{% static  "assets1/vendors/chart.js/Chart.min.js" %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{% static  "assets1/js/off-canvas.js" %}"></script>
+  <script src="{% static  "assets1/js/hoverable-collapse.js" %}"></script>
+  <script src="{% static  "assets1/js/template.js" %}"></script>
+  <script src="{% static  "assets1/js/todolist.js" %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{% static  "assets1/js/dashboard.js" %}"></script>
+  <script src="{% static  "assets1/js/file-upload.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/jquery.dataTables.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/dataTables.dataTables.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/dataTables.responsive.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/responsive.dataTables.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/jquery.dataTables.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/dataTables.bootstrap4.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/dataTables.buttons.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/buttons.bootstrap4.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/jszip.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/pdfmake.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/vfs_fonts.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/buttons.html5.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/buttons.print.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/buttons.colVis.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/dataTables.responsive.min.js" %}"></script>
+  <script src="{% static "assets2/plugins/datatable/js/responsive.bootstrap4.min.js" %}"></script>
+  <script src="{% static "assets2/js/table-data.js" %}"></script>
+  <!-- End custom js for this page-->
+</body>
+
+</html>
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title></title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static "assets1/vendors/ti-icons/css/themify-icons.css" %}">
+  <link rel="stylesheet" href="{% static "assets1/vendors/base/vendor.bundle.base.css" %}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static "assets1/css/style.css" %}">
+  <link rel="stylesheet" href="{% static "assets1/css/mystyle.css" %}">
+  <!-- endinject -->
+  {% comment %} <link rel="shortcut icon" href="{% static "assets1/images/favicon.png" %}"> {% endcomment %}
+</head>
+
+
+<body>
+
+{% block content %}
+
+
+
+{% endblock content %}
+
+
+
+<!-- plugins:js -->
+<script src="{% static  "assets1/vendors/base/vendor.bundle.base.js" %}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page-->
+<script src="{% static  "assets1/vendors/chart.js/Chart.min.js" %}"></script>
+<!-- End plugin js for this page-->
+<!-- inject:js -->
+<script src="{% static  "assets1/js/off-canvas.js" %}"></script>
+<script src="{% static  "assets1/js/hoverable-collapse.js" %}"></script>
+<script src="{% static  "assets1/js/template.js" %}"></script>
+<script src="{% static  "assets1/js/todolist.js" %}"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="{% static  "assets1/js/dashboard.js" %}"></script>
+<script src="{% static  "assets1/js/file-upload.js" %}"></script>
+<!-- End custom js for this page-->
+</body>
+
+</html>
