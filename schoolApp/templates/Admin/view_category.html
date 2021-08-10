@@ -37,8 +37,8 @@
                         <tr>
                           <td>{{forloop.counter}}</td>
                           <td>{{cat.name}}</td>
-                           <td><a href = "#" title = 'Edit'><i class="ti-pencil"></i></a>&nbsp;&nbsp;&nbsp;
-                            <a href = "#" title = 'Delete'><i class="ti-trash"></i></a> 
+                           <td><a href = "{% url 'category_edit' cat.slug %}" title = 'Edit'><i class="ti-pencil"></i></a>&nbsp;&nbsp;&nbsp;
+                            <a href = "{% url 'category_delete' cat.slug %}" title = 'Delete'><i class="ti-trash"></i></a> 
                             </td>
                         {% endfor %}
                         </tr>

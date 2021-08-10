@@ -41,8 +41,8 @@
                           <td>{{post.title}}</td>
                           <td>{% for category in post.category.all %}{{category}},&nbsp;&nbsp;{% endfor %}</td>
                           <td>{{post.author}}</td>
-                          <td><a href = "#" title = 'Edit'><i class="ti-pencil"></i></a>&nbsp;&nbsp;&nbsp;
-                          <a href = "#" title = 'Delete'><i class="ti-trash"></i></a> 
+                          <td><a href = "{% url 'post_edit' post.slug %}" title = 'Edit'><i class="ti-pencil"></i></a>&nbsp;&nbsp;&nbsp;
+                          <a href = "{% url 'post_delete' post.slug %}" title = 'Delete'><i class="ti-trash"></i></a> 
                           </td>
                         {% endfor %}
                         </tr>

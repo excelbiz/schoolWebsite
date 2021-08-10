@@ -1,0 +1,37 @@
+{% extends 'base_generic.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="font-weight-bold mb-0">Delete Post</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <form class="forms-sample" method = 'POST'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <p>Are you sure you want to delete <h3 style = "text-transform:uppercase; font-family:cambria; color:#4def;">{{post.title}} ?</h3></p><br>
+                
+                    </div>
+                   <button class = "btn btn-danger" name = 'confirm' type = "submit"><a href = "{% url 'post_delete' post.id %}" style = "text-transform:uppercase; color:white;">Delete</a></button>&nbsp;
+                   <button class = "btn btn-success" name = 'cancel'><a href = "{% url 'post' %}" style = "text-transform:uppercase; color:white;">Cancel</a></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+         
+        </div> 
+
+{% endblock content %}

@@ -13,6 +13,7 @@ class Post(models.Model):
     category = models.ManyToManyField('Category', help_text = 'select a category for this post' )
     slug = models.SlugField(null = True, blank = True)
     published_at = models.DateTimeField(auto_now_add = True)
+    noOfViews = models.PositiveIntegerField(default = 0)
 
     class Meta:
         ordering = ['-id']
@@ -33,10 +34,16 @@ class Post(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length = 100)
+    slug = models.SlugField(null = True, blank = True)
     created_at = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+            if self.slug is None and self.name:
+                self.slug = slugify(str(self.name))
+            return super(Category, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['-id']

@@ -65,6 +65,17 @@ def addPost(request):
     return render(request, 'Admin/addPost.html', {'form':form})
 
 @login_required(login_url= 'userLogin')
+def updatePost(request, slug):
+    post = Post.objects.get(slug = slug)
+    form = postForm(request.POST or None, request.FILES or None, instance = post)
+    if form.is_valid():
+        title = form.cleaned_data.get('title')
+        form.save()
+        messages.success(request, title + ' Updated Successfully!')
+        return redirect('post')
+    return render(request, 'Admin/update_post.html', {'form':form})
+
+@login_required(login_url= 'userLogin')
 def addCategory(request):
     form = categoryForm()
     if request.method == 'POST':
@@ -77,6 +88,47 @@ def addCategory(request):
     else:
         form = categoryForm()
     return render(request, 'Admin/addCategory.html', {'form':form})
+
+
+@login_required(login_url= 'userLogin')
+def updateCategory(request, slug):
+    cat = Category.objects.get(slug = slug)
+    form = categoryForm(request.POST or None, instance = cat)
+    if form.is_valid():
+        name = form.cleaned_data.get('name')
+        form.save()
+        messages.success(request, name + ' Updated Successfully!')
+        return redirect('view_category')
+    return render(request, 'Admin/update_category.html', {'form':form})
+
+@login_required(login_url= 'userLogin')
+def deletePost(request, slug):
+    post = Post.objects.get(slug = slug)
+    if request.method == 'POST':
+        post.delete()
+        messages.info(request, 'Blog Post Deleted Successfully!')
+        return redirect('post')
+        
+    context = {
+        'post': post
+    }
+
+    return render(request, 'Admin/delete_post.html', context)
+
+
+@login_required(login_url= 'userLogin')
+def deleteCategory(request, slug):
+    category = Category.objects.get(slug = slug)
+    if request.method == 'POST':
+        category.delete()
+        messages.info(request, 'Category Deleted Successfully!')
+        return redirect('view_category')
+        
+    context = {
+        'category': category
+    }
+
+    return render(request, 'Admin/delete_category.html', context)
 
 
 def adminLogout(request):
@@ -97,11 +149,16 @@ class BlogListView(ListView):
     template_name = 'blog.html'
     context_object_name = 'posts'
     ordering = ['-published_at']
-    paginate_by = '10'
+    paginate_by = '2'
 
     def get_queryset(self):
         post = Post.objects.all()
         return post
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['latest_post'] = Post.objects.all()[:5]
+        return context
 
 class CategoryListView(ListView):
     template_name = 'Admin/view_category.html'
@@ -113,6 +170,15 @@ class CategoryListView(ListView):
         category = Category.objects.all()
         return category
 
+def searchBlog(request):
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        result = Post.objects.filter(title__contains=search)
+        category = Category.objects.all()
+        posts = Post.objects.all().order_by('-published_at')[:2]
+
+        return render(request, 'search_result.html', {'result': result, 'query': request.POST, 'category':category, 'posts':posts})
+
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     context['categories'] = Category.objects.all()[:10]
@@ -121,12 +187,12 @@ class CategoryListView(ListView):
     #     return context
     
 
-# class PostDetailView(DetailView):
-#     model = Post
-#     template_name = 'single-blog.html'
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['latest_post'] = Post.objects.all()[:5]
-#         context['categories'] = Category.objects.all()[:10]
-#         return context
+class BlogDetailView(DetailView):
+    model = Post
+    template_name = 'single_blog.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['latest_post'] = Post.objects.all()[:5]
+        # context["is_viewed"] = Post.objects.filter(noOfViews = 1)
+        return context
