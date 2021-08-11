@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 <section class="grey section">
@@ -23,36 +23,36 @@
 </div>
 <div class="blog-wrapper">
 <div class="blog-title">
-<a class="category_title" title="">{% for category in object.category.all %}{{category}},&nbsp;&nbsp;{% endfor %}</a>
-<h2>{{post.title}}</h2>
+<a class="category_title" title="">{% for category in posts.category.all %}{{category}},&nbsp;&nbsp;{% endfor %}</a>
+<h2>{{posts.title}}</h2>
 <div class="post-meta">
 <span>
 <i class="fa fa-user"></i>
-<a href="#">{{object.author}}</a>
+<a href="#">{{posts.author}}</a>
 </span>
 <span>
 <i class="fa fa-comments"></i>
-<a href="#">21 Comments</a>
+{{replies.count}} Comment{{ replies.count|pluralize }}
 </span>
 <span>
 <i class="fa fa-eye"></i>
-<a href="#">123 Views</a>
+{{posts.noOfViews}} View{{ posts.noOfViews|pluralize }}
 </span>
 <span>
 <i class="fa fa-clock-o"></i>
-<a href="#">{{object.published_at|date}}</a>
+<a href="#">{{posts.published_at|date}}</a>
 </span>
 </div>
 </div>
 <div class="blog-image">
-<a href="single.html" title=""><img src="{{object.image.url}}" alt="" class="img-responsive"></a>
+<a href="#" title=""><img src="{{posts.image.url}}" alt="" class="img-responsive"></a>
 </div>
 <div class="blog-desc">
 <div class="post-date">
-<span class="day">{{object.published_at|date:'d'}}</span>
-<span class="month">{{object.published_at|date:'F'}}</span>
+<span class="day">{{posts.published_at|date:'d'}}</span>
+<span class="month">{{posts.published_at|date:'F'}}</span>
 </div>
-<p>{{object.content}}</p>
+<p>{{posts.content}}</p>
 </div>
 </div>
 <hr class="invis">
@@ -85,56 +85,51 @@
 </ul>
 </nav>
 {% endif %}
-<div>
+<div class="blog-wrapper comment-wrapper">
 <h3>
-What others say about this post? (3 Comments)
+{% if replies %}					
+What others say about this post? ({{replies.count}} Comment{{replies.count|pluralize}} )
 </h3>
+{% else %}
+<h2>No Replies Yet! Be the first to comment!</h2>
+{% endif %}
+{% for reply in replies %}
 <div class="well">
 <div class="media">
 <div class="media-left">
-<a href="#">
-<img class="media-object" src="upload/xstudent_01.png.pagespeed.ic.756JwMcqdq.png" alt="Generic placeholder image">
-</a>
+<img class="media-object" src="{% static 'images/download.png' %}" width = "0px" style="border-radius:30px" alt="">
 </div>
 <div class="media-body">
-<h4 class="media-heading">John DOE</h4>
+<h4 class="media-heading">{{reply.commenter}}</h4>
 <div class="time-comment clearfix">
-<small class="pull-left">21 Jun 2015</small>
-<a class="pull-right btn btn-primary btn-xs">Reply</a>
+<small class="pull-left">{{reply.date_created}}</small>
 </div>
-<p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-</div>
+<p>{{reply.comment}}</p>
 </div>
 </div>
 </div>
-<div class="media comment-reply">
-<div class="media-left">
-<a href="#">
-<img class="media-object" src="upload/xstudent_02.png.pagespeed.ic.y-PM-y4pVj.png" alt="Generic placeholder image">
-</a>
+{% endfor %}
 </div>
-<div class="media-body">
-<h4 class="media-heading">Amanda FOXOE</h4>
-<div class="time-comment clearfix">
-<small class="pull-left">21 Jun 2015</small>
-<a class="pull-right btn btn-primary btn-xs">Reply</a>
-</div>
-<p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-</div>
-</div>
+
 <div class="widget-title">
 <h4>Leave a Comment</h4>
 <hr>
 </div>
 <div class="commentform">
-<p>Please use only default html tags.</p>
-<form>
-<input type="text" class="form-control" placeholder="Your name">
-<input type="email" class="form-control" placeholder="Your email">
-<input type="text" class="form-control" placeholder="Your website">
-<textarea type="text" class="form-control" placeholder="Message goes here"></textarea>
-<input type="submit" value="Send Comment" class="btn btn-primary btn-block"/>
+{% if request.user.is_authenticated %}
+<form method = 'POST'>
+{% csrf_token %}
+<label>Username</label>
+<input type="text" class="form-control" placeholder="Your name" value = "{{request.user.username}}" readonly>
+<label>Email</label>
+<input type="email" class="form-control" placeholder="Your email" value = "{{request.user.visitor.email}}" readonly>
+<label>Comment</label>
+{{form.comment}}
+<input type="submit" value="Comment" class="btn btn-primary btn-block"/>
 </form>
+{% else %}
+<p>Please <a href="{% url 'login' %}" class="text-default">Login</a> to Comment</p>
+{% endif %}
 </div>
 </div>
 

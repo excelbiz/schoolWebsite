@@ -71,7 +71,7 @@ class Course(models.Model):
         
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete = models.CASCADE)
-    commenter = models.ForeignKey('Visitor', on_delete = models.CASCADE)
+    commenter = models.ForeignKey(User, on_delete = models.CASCADE)
     comment = models.TextField()
     date_created = models.DateField(auto_now_add = True)
     time_created = models.TimeField(auto_now_add = True)
@@ -89,7 +89,8 @@ class Visitor(models.Model):
     date_joined = models.DateField(auto_now_add = True)
 
     def __str__(self):
-        return self.user
+        return self.user.username
+
     
 
     

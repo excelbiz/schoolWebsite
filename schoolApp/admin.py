@@ -24,8 +24,13 @@ class VisitorAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'course_price')
     ordering = ['-id']
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('commenter',)
+    ordering = ['-id']
     
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Visitor, VisitorAdmin)
 admin.site.register(Course, CourseAdmin)
+admin.site.register(Comment, CommentAdmin)

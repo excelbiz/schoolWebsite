@@ -177,22 +177,62 @@ def searchBlog(request):
         category = Category.objects.all()
         posts = Post.objects.all().order_by('-published_at')[:2]
 
-        return render(request, 'search_result.html', {'result': result, 'query': request.POST, 'category':category, 'posts':posts})
+        return render(request, 'search_result.html', {'result': result, 'query': request.POST, 'category':category, 'posts':posts})    
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['categories'] = Category.objects.all()[:10]
-    #     context['latest_posts'] = Post.objects.all()[:5]
-    #     context['num_categories'] = Post.objects.count()
-    #     return context
-    
+def visitorLogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-class BlogDetailView(DetailView):
-    model = Post
-    template_name = 'single_blog.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['latest_post'] = Post.objects.all()[:5]
-        # context["is_viewed"] = Post.objects.filter(noOfViews = 1)
-        return context
+        visitor = authenticate(request, username = username, password = password)
+
+        if visitor is not None:
+            login(request, visitor)
+            return redirect('blog')
+        else:
+            messages.warning(request, 'Invalid Login Details')
+            return redirect('login')
+    return render(request, 'login.html')
+
+def VisitorLogout(request):
+    logout(request)
+    return redirect('index')
+
+
+def visitorReg(request):
+    form = VisitorForm()
+    post = Post.objects.all()[:3]
+    if request.method == 'POST':
+        form = VisitorForm(request.POST or None)
+        if form.is_valid():
+            visitor = form.cleaned_data.get('username')
+            visit_obj = form.save(commit = False)
+            visit_obj.user = User.objects.create_user(
+
+                password = form.cleaned_data.get('password2'),
+                username = form.cleaned_data.get('username'),
+            )
+            visit_obj.save()
+            messages.success(request, 'Account for ' + visitor + ' was created successfully!')
+            return redirect('index')
+
+    else:
+        form = VisitorForm()
+    return render(request, 'register.html', {'form':form, 'posts':post})
+
+
+def blogDetail(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    query = Comment.objects.filter(post=post)
+    form = commentForm(request.POST or None)
+    if form.is_valid():
+        comment = form.save(commit = False)
+        comment.commenter = request.user
+        comment.post = post
+        comment.save()
+        messages.success(request, "You Commented on this post!")
+        return redirect('blog_detail', slug = post.slug)
+    latest_post = Post.objects.all()[:3]
+    post.noOfViews = post.noOfViews + 1
+    post.save()
+    return render(request, 'single_blog.html', {'posts': post, 'latest_post':latest_post, 'replies' : query, 'form':form})

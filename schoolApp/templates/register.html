@@ -9,90 +9,69 @@
 <div class="blog-wrapper">
 <div class="row second-bread">
 <div class="col-md-6 text-left">
-<h1>Blog & News</h1>
+<h1>User Registration</h1>
 </div>
 <div class="col-md-6 text-right">
 <div class="bread">
 <ol class="breadcrumb">
 <li><a href="#">Home</a></li>
-<li class="active">Blog</li>
+<li class="active">Register</li>
 </ol>
 </div>
 </div>
 </div>
 </div>
 <div class="blog-wrapper">
-{% for post in posts %}
 <div class="blog-title">
-<a class="category_title"  title="">{% for category in post.category.all %}{{category}},&nbsp;&nbsp;{% endfor %}</a>
-<h2><a href="{% url 'blog_detail' post.slug %}" title="">{{post.title}}</a></h2>
 <div class="post-meta">
-<span>
-<i class="fa fa-user"></i>
-{{post.author}}
-</span>
-<span>
-<i class="fa fa-tags"></i>
-{% for category in post.category.all %}{{category}},&nbsp;&nbsp;{% endfor %}
-</span>
-<span>
-<i class="fa fa-eye"></i>
-{{post.noOfViews}} View{{ posts.noOfViews|pluralize }}
-</span>
-</div>
-</div>
-<div class="blog-image">
-<a href="{% url 'blog_detail' post.slug %}" title=""><img src="{{post.image.url}}" alt="" class="img-responsive"></a>
-</div>
-<div class="blog-desc">
-<div class="post-date">
-<span class="day">{{post.published_at|date:'d'}}</span>
-<span class="month">{{post.published_at|date:'F'}}</span>
-</div>
-<p>{{post.content|truncatewords:50}}</p>
-<a href="{% url 'blog_detail' post.slug %}" class="readmore">Read More</a>
-</div>
+
+<form action="." method = "POST">
+{% csrf_token %}
+{% if messages %}
+{% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    <strong style = 'text-transform:uppercase;'>{{message}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
 {% endfor %}
+{% endif %}
+<div class="form-group">
+    <div class="col lg-12">
+    <label>Username</label>
+    {{form.username}}
+    </div>
+    {{form.errors.username}}
 </div>
-<hr class="invis">
-{% if page_obj.has_other_pages %}
-<nav class="text-center">
-<ul class="pagination">
-{% if page_obj.has_previous %}
-<li class="page-item"><a aria-label="Previous"
-        href="?sort_by={{sort_by}}&page={{ page_obj.previous_page_number }}">&laquo;</a>
-</li>
-{% else %}
-<li class="disabled page-item"><a class="page-link" href="#">&laquo;</a></li>
-{% endif %}
-{% for num in page_obj.paginator.page_range %}
-{% if num <= page_obj.number|add:3 and num > page_obj.number|add:-3 %}
-{% if num == page_obj.number %}
-<li class="page-item active"><a class="page-link" href="#">{{forloop.counter}}</a></li>
-{% else %}
-<li class="page-item"><a class="page-link" href="?sort_by={{sort_by}}&page={{ forloop.counter }}">
-        {{ forloop.counter }}</a></li>
-{% endif %}
-{% endif %}
-{% endfor %}
-{% if page_obj.has_next %}
-<li class="page-item"><a aria-label="Next"
-        href="?sort_by={{sort_by}}&page={{ page_obj.next_page_number }}">&raquo;</a></li>
-{% else %}
-<li class="disabled page-item"><a class="page-link" href="#">&raquo;</a></li>
-{% endif %}
-</ul>
-</nav>
-{% endif %}
+<div class="form-group">
+    <div class="col lg-12">
+    <label>Email</label>
+    {{form.email}}
+    </div>
+    {{form.errors.email}}
 </div>
-<div id="sidebar" class="col-md-4 col-sm-4 col-xs-12">
-<div class="widget">
-<div class="searchform">
-<form>
-<input type="text" class="form-control" placeholder="What you are looking for?">
+<div class="form-group">
+    <div class="col lg-12">
+    <label>Password</label>
+    {{form.password1}}
+    </div>
+    {{form.errors.password1}}
+</div>
+<div class="form-group">
+    <div class="col lg-12">
+    <label>Confirm Password</label>
+    {{form.password2}}
+    </div>
+    {{form.errors.password2}}
+</div>
+<button class="btn btn-primary btn-block" type="submit">SignUp</button>
 </form>
 </div>
 </div>
+</div>
+</div>
+<div id="sidebar" class="col-md-4 col-sm-4 col-xs-12">
 <div class="widget">
 <div class="widget-title">
 <h4>Subscribe Us</h4>
@@ -147,7 +126,7 @@
 <hr>
 </div>
 <div class="twitter-widget">
-{% for post in latest_post %}
+{% for post in posts %}
 <ul class="latest-tweets">
 <li>
 <p><a href="#" title="">@{{post.author}}</a>{{post.content|truncatewords:20}}</p>
